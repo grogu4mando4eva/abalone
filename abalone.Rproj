@@ -1,13 +1,49 @@
-Version: 1.0
-
-RestoreWorkspace: Default
-SaveWorkspace: Default
-AlwaysSaveHistory: Default
-
-EnableCodeIndexing: Yes
-UseSpacesForTab: Yes
-NumSpacesForTab: 2
-Encoding: UTF-8
-
-RnwWeave: Sweave
-LaTeX: pdfLaTeX
+library(readr)
+data <- read_csv("https://raw.githubusercontent.com/STATS-UOA/databunker/master/data/abalone.csv")
+library(data)
+##checking for NA
+data %>% 
+  apply(., 2, is.na)%>%
+  apply(., 2, sum)
+##length by sex
+data %>% 
+  group_by(Sex)%>%
+  summarise(average_length = mean(Length))
+##shucked weight by sex
+data %>% 
+  group_by(Sex)%>%
+  summarise(average_shuckwt = mean(ShuckedWt))
+##shell weight by sex
+data %>% 
+  group_by(Sex)%>%
+  summarise(average_shellwt = mean(ShellWt))
+##whole weight by sex
+data %>% 
+  group_by(Sex)%>%
+  summarise(average_wholewt = mean(WholeWt))
+##median class ranking by sex
+data %>% 
+  group_by(Sex)%>%
+  summarise(median_class = median(Class))
+##class ranking average weight
+data %>% 
+  group_by(Class)%>%
+  summarise(average_weight_class = mean(WholeWt))
+##number of rings by weight
+data %>% 
+  group_by(Sex, Rings)%>%
+  summarise(sex_rings_weight = mean(WholeWt))
+##rings and weight
+data %>% 
+  group_by(Rings)%>%
+  summarise(rings_weight = mean(WholeWt))
+##diameter by sex
+data %>% 
+  group_by(Sex)%>%
+  summarise(average_diameter = mean(Diameter))
+##ggplot scatter diameter by whole weight
+library(ggplot2)
+  ggplot(data, aes(x = average_diameter, y = average_wholewt ), color = Sex) +
+  geom_point() +
+  geom_smooth(method ='lm', se = FALSE)
+  
